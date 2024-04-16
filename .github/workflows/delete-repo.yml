@@ -17,5 +17,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const repo = "${{ github.event.inputs.repo }}";
-            const endpoint = `DELETE /repos/Deon-J-Butler/${repo}`;
-            await github.rest.request(endpoint);
+            await github.rest.repos.delete({
+              owner: 'Deon-J-Butler',
+              repo: repo
+            });
