@@ -1,0 +1,26 @@
+name: Delete Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_name:
+        description: 'Repository to delete (format: username/repo)'
+        required: true
+
+jobs:
+  delete-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Repository
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repo = "${{ github.event.inputs.repo_name }}";
+            const [owner, repoName] = repo.split('/');
+            if (github.context.repo.owner.toLowerCase() === owner.toLowerCase()) {
+              const endpoint = `DELETE /repos/${owner}/${repoName}`;
+              await github.rest.request(endpoint);
+            } else {
+              throw new Error("You can only delete repositories owned by your account or organization.");
+            }
