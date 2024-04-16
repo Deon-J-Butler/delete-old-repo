@@ -3,8 +3,8 @@ name: Delete Repository
 on:
   workflow_dispatch:
     inputs:
-      repo_name:
-        description: 'Repository to delete (format: username/repo)'
+      repo:
+        description: 'Repository to delete:'
         required: true
 
 jobs:
@@ -16,11 +16,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const repo = "${{ github.event.inputs.repo_name }}";
-            const [owner, repoName] = repo.split('/');
-            if (github.context.repo.owner.toLowerCase() === owner.toLowerCase()) {
-              const endpoint = `DELETE /repos/${owner}/${repoName}`;
-              await github.rest.request(endpoint);
-            } else {
-              throw new Error("You can only delete repositories owned by your account or organization.");
-            }
+            const repo = "${{ github.event.inputs.repo }}";
+            const endpoint = `DELETE /repos/Deon-J-Butler/${repo}`;
+            await github.rest.request(endpoint);
